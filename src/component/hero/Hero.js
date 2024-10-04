@@ -4,6 +4,7 @@ import { Paper } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay } from '@fortawesome/free-solid-svg-icons';
 import {Link} from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 const Hero = ({movies}) => {
   return (
@@ -30,6 +31,9 @@ const Hero = ({movies}) => {
                                             />
                                         </div>
                                         </Link>
+                                        <div>
+                                            <Button variant=''></Button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
