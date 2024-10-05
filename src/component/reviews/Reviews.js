@@ -2,20 +2,42 @@ import { useEffect,useRef } from "react";
 import api from '../../api/axiosconfig';
 import {useParams} from 'react-router-dom';
 import { Container,Row,Col } from "react-bootstrap";
-
-import React from 'react'
 import ReviewForm from "../reviewForm/ReviewForm";
 
-const review = () => {
+import React from 'react';
+
+const Reviews = ({getMovieData,movie,reviews,setReviews}) => {
 
     const revText=useRef();
     let params=useParams();
     const movieId=params.movieId;
 
     useEffect( () =>{
-        getMovieDate(movieId);
+        getMovieData(movieId);
     },[]
     )
+    const addReview =async (e) =>{
+      
+      e.preventDefault();
+
+      const rev = revText.current;
+      try
+      {
+      const  response = await api.post("/api/v1/reviews",{reviewBody:rev.value,imdbId:movieId});
+      const currentReviews = Array.isArray(reviews) ? reviews : [];
+
+      const updatedReviews = [...currentReviews, {body:rev.value}];
+      
+      rev.value =" ";
+
+      setReviews(updatedReviews);
+
+      } 
+      catch (error) {
+        console.error(error);
+      }
+
+    };
   return (
     <Container>
         <Row>
@@ -23,25 +45,25 @@ const review = () => {
         </Row>
         <Row className="mt-2">
             <Col>
-            <img src={movieId?.poster} alt="" />
+            <img src={movie?.poster} alt="" />
             </Col>
             <Col>
               {
                 <>
                 <Row>
                     <Col>
-                    <ReviewForm handleSumbit={addReview} revText={revText} labeltext="Write a Review?"/>
+                      <ReviewForm handleSumbit={addReview} revText={revText} labelText="Write a Review?"/>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                    <hr />
+                      <hr />
                     </Col>
                 </Row>
                 </>
               }
               {
-                reviews?.map( (r) =>{
+                reviews?.map((r) =>{
                     return(
                       <>
                       <Row>
@@ -59,12 +81,12 @@ const review = () => {
             </Col>
         </Row>
         <Row>
-                    <Col>
-                    <hr />
-                    </Col>
-                </Row>
+        <Col>
+          <hr />
+        </Col>
+        </Row>                       
     </Container>
   )
 }
 
-export default review
+export default Reviews
